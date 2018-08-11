@@ -23,4 +23,7 @@ class User < ApplicationRecord
 	validates :email, :uniqueness => { :case_sensitive => false }
 	validates :email, format: { with: URI::MailTo::EMAIL_REGEXP } 
 
+	def is_duplicate_meta?
+		user_meta.map(&:meta_key).count>1
+	end
 end

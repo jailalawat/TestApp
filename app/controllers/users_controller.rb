@@ -28,12 +28,13 @@ class UsersController < ApplicationController
   # POST /users.json
   def create
     @user = User.new(user_params)
-    
+    dup_meta_key = @user.is_duplicate_meta?
     respond_to do |format|
-      if @user.save
+      if !dup_meta_key && @user.save
         format.html { redirect_to @user, notice: 'User was successfully created.' }
         format.json { render :show, status: :created, location: @user }
       else
+        @user.errors.add(:base, "Meta Key is duplicate") if dup_meta_key
         format.html { render :new }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end

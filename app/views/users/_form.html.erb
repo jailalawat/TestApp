@@ -1,0 +1,90 @@
+<%= simple_form_for @user, :html => { :class => 'form-horizontal' } do |f| %>
+	<% if @user.errors.any? %>
+	  <div id="error_explanation">
+	    <h2>
+	      <%= pluralize(@user.errors.count, "error") %>
+	      prohibited this user from being saved:
+	    </h2>
+	    <ul>
+	      <% @user.errors.full_messages.each do |message| %>
+	        <li>
+	          <%= message %>
+	        </li>
+	      <% end %>
+	    </ul>
+	  </div>
+	<% end %>
+
+  <div class="row">
+	  <div class="col-md-6">
+	    <div class="form-group">
+			  <%= f.input :first_name, :input_html => { class: 'form-control'}, :required=> true %>
+			  <%= f.error_span(:first_name) %>
+		  </div>
+	  </div>
+	</div>
+  <div class="row">
+	  <div class="col-md-6">
+	    <div class="form-group">
+			  <%= f.input :last_name, :input_html => { class: 'form-control'}, :required=> true %>
+			  <%= f.error_span(:last_name) %>
+		  </div>
+	  </div>
+	</div>
+  <div class="row">
+	  <div class="col-md-6">
+	    <div class="form-group">
+			  <%= f.input :email, :input_html => { class: 'form-control'}, :required=> true %>
+			  <%= f.error_span(:email) %>
+		  </div>
+	  </div>
+	</div>
+	<div class="row">
+	  <div class="col-md-6">
+	    <div class="form-group">
+	    	<label>Roles:</label>
+				<%= f.collection_select :role_ids, Role.active, :id, :name, {prompt: false, class: "form-control"}, {:multiple => true} %>
+			  <%= f.error_span(:roles) %>
+		  </div>
+	  </div>
+	</div>
+	<div class="row">
+	  <div class="col-md-6">
+	    <div class="form-group">
+				<div id="images">
+			  	<%= f.simple_fields_for :albums do |album| %>
+				    <%= render 'album_fields', f: album %>
+				  <% end %>
+				  <div class="links">
+				    <%= link_to_add_association 'add images', f, :albums, class: "btn btn-warning" %>
+				  </div>
+				</div>
+			</div>
+	  </div>
+	</div>
+
+	<div class="row">
+	  <div class="col-md-6">
+	    <div class="form-group">
+				<div id="user_meta">
+			  	<%= f.simple_fields_for :user_meta do |user_meta| %>
+				    <%= render 'user_metum_fields', f: user_meta %>
+				  <% end %>
+				  <div class="links">
+				    <%= link_to_add_association 'add details', f, :user_meta, class: "btn btn-warning" %>
+				  </div>
+				</div>
+			</div>
+	  </div>
+	</div>
+
+  <div class="row">
+	  <div class="col-md-6">
+	    <div class="form-group">
+			  <%= f.button :submit, :class => 'btn btn-primary' %>
+			  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+			                users_path, :class => 'btn btn-default' %>
+      </div>
+	  </div>
+	</div>
+<% end %>
